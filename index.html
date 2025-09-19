@@ -11,6 +11,7 @@
     <h1 id="CookieCount">Cookies:0</h1>
     
     <h1 id="CookiePerClick">Cookies Per Click:1</h1>
+    <h1 id="PrijsUpgrade">PrijsUpgrade:10 </h1>
 
     <!-- cookie -->
     <img
@@ -22,23 +23,32 @@
   <script>
 
     //variables defineren
-    let teller = 0;
-    let CookiePerClick = 1;
+    let teller = parseInt(localStorage.getItem("teller")) || 0;
+    let CookiePerClick = parseInt(localStorage.getItem("CookiePerClick")) || 1;
+    let PrijsUpgrade = parseInt(localStorage.getItem("PrijsUpgrade")) || 10;
 
     //als op cookie word geklikt dan teller + cookiesperclick
     function CookieClicked() {
       teller = teller + CookiePerClick;
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+      localStorage.setItem("teller", teller);
     }
 
     //functie om cookie per click erbij te doen
     function CookiePerClickPlusOne() {
-        if(teller >= 10){
+        if(teller >= PrijsUpgrade){
       CookiePerClick++;
       document.getElementById("CookiePerClick").innerHTML =
         "Cookies Per Click:" + CookiePerClick;
-        teller = teller - 10;
-        document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;}
+        teller = teller - PrijsUpgrade;
+        document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+        localStorage.setItem("CookieCount", CookieCount);
+         
+        PrijsUpgrade = PrijsUpgrade + 10;
+      document.getElementById("PrijsUpgrade").innerHTML = "PrijsUpgrade:" + PrijsUpgrade;
+      localStorage.setItem("PrijsUpgrade", PrijsUpgrade);} 
+
+       
 
         else {
             document.getElementById("koopknop").innerHTML = "Niet genoeg cookies"
