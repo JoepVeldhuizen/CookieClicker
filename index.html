@@ -17,7 +17,7 @@
     <!-- cookie -->
     <img
       onclick="CookieClicked()"
-      src="https://png.pngtree.com/png-vector/20250425/ourmid/pngtree-chocolate-chip-cookie-icon-white-background-png-image_16100260.png"
+      src="cookie.png"
     />
     <button' id="koopknop" onclick="CookiePerClickPlusOne()">CookiePerClicks +1</button>
   </body>
@@ -51,6 +51,7 @@
         teller = teller - PrijsUpgrade;
         document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
         localStorage.setItem("CookiePerClick", CookiePerClick);
+        localStorage.setItem("teller", teller); 
          
         PrijsUpgrade = PrijsUpgrade + 10;
       document.getElementById("PrijsUpgrade").innerHTML = "PrijsUpgrade:" + PrijsUpgrade;
