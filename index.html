@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie Clicker</title>
+  </head>
+  <body>
+    <h1 id="CookieCount">Cookies:0</h1>
+    <h1 id="CookiePerClick">Cookies Per Click:1</h1>
+    <img
+      onclick="CookieClicked()"
+      src="https://png.pngtree.com/png-vector/20250425/ourmid/pngtree-chocolate-chip-cookie-icon-white-background-png-image_16100260.png"
+    />
+    <button' id="koopknop" onclick="CookiePerClickPlusOne()">CookiePerClicks +1</button>
+  </body>
+  <script>
+    let teller = 0;
+    let CookiePerClick = 1;
+
+    function CookieClicked() {
+      teller = teller + CookiePerClick;
+      document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+      console.log();
+    }
+
+    function CookiePerClickPlusOne() {
+        if(teller >= 10){
+      CookiePerClick++;
+      document.getElementById("CookiePerClick").innerHTML =
+        "Cookies Per Click:" + CookiePerClick;}
+        else {
+            document.getElementById("koopknop").innerHTML = "Niet genoeg cookies"
+        }
+    }
+  </script>
+</html>
