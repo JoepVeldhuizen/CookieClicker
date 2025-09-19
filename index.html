@@ -6,8 +6,13 @@
     <title>Cookie Clicker</title>
   </head>
   <body>
+
+    <!-- cookie counter -->
     <h1 id="CookieCount">Cookies:0</h1>
+    
     <h1 id="CookiePerClick">Cookies Per Click:1</h1>
+
+    <!-- cookie -->
     <img
       onclick="CookieClicked()"
       src="https://png.pngtree.com/png-vector/20250425/ourmid/pngtree-chocolate-chip-cookie-icon-white-background-png-image_16100260.png"
@@ -15,15 +20,18 @@
     <button' id="koopknop" onclick="CookiePerClickPlusOne()">CookiePerClicks +1</button>
   </body>
   <script>
+
+    //variables defineren
     let teller = 0;
     let CookiePerClick = 1;
 
+    //als op cookie word geklikt dan teller + cookiesperclick
     function CookieClicked() {
       teller = teller + CookiePerClick;
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
-      console.log();
     }
 
+    //functie om cookie per click erbij te doen
     function CookiePerClickPlusOne() {
         if(teller >= 10){
       CookiePerClick++;
