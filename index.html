@@ -28,11 +28,16 @@
         if(teller >= 10){
       CookiePerClick++;
       document.getElementById("CookiePerClick").innerHTML =
-        "Cookies Per Click:" + CookiePerClick;}
+        "Cookies Per Click:" + CookiePerClick;
+        teller = teller - 10;
+        document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;}
+
         else {
             document.getElementById("koopknop").innerHTML = "Niet genoeg cookies"
-
+            setTimeout(() => {
             document.getElementById("koopknop").innerHTML = "CookiePerClicks +1"
+            }, 1000);
+            
         }
     }
   </script>
