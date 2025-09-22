@@ -15,32 +15,25 @@
     <title>Cookie Clicker</title>
   </head>
   <body onload="PageLoaded()">
-
-
-    <!-- cookie counter -->
-    
-
-    <!-- cookie -->
-    <img
-      onclick="CookieClicked()"
-      src="cookie.png"
-      id="cookie"
-      class="cookie"
-    />
     
 <div class="container mt-4">
 <div class="row">
   <div class="col-md-3">Stats</div>
-  <div class="card p-3 shadow-sm">
-    <h4>Stats</h4>
+  <div class="stats">
     <h1 id="CookieCount">Cookies:0</h1>
     <h1 id="CookiePerClick">Cookies Per Click:1</h1>
     <h1 id="PrijsUpgrade">PrijsUpgrade:10 </h1>
   </div>
 </div>
 
-  <div class="col-md-6">Cookie</div>
-  <div class="col-md-3"><button' id="koopknop" onclick="CookiePerClickPlusOne()">CookiePerClicks +1</button></div>
+  <div class="col-md-6">
+    <img
+      onclick="CookieClicked()"
+      src="cookie.png"
+      id="cookie"
+      class="cookie"
+    /></div>
+  <div class="upgrades"><button' id="koopknop" onclick="CookiePerClickPlusOne()">CookiePerClicks +1</button></div>
 
 </div>
 </div>
@@ -65,9 +58,9 @@
       teller = teller + CookiePerClick;
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
       localStorage.setItem("teller", teller); 
-      document.getElementById("cookie").style.width = "450px" ;
+      document.getElementById("cookie").style.scale = "0.9" ;
     setTimeout(() => {
-        document.getElementById("cookie").style.width = "500px" ;
+        document.getElementById("cookie").style.scale = "1" ;
         }, 100);
     }
 
