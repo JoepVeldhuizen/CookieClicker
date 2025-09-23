@@ -1,0 +1,19 @@
+.cookie {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    transition: 500ms;
+    left: 700px;
+    top: 300px;
+}
+
+.row {
+    width: 250px;
+    left:  50px;
+    position: absolute;
+    
+    
+}
+
+
