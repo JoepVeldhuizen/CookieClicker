@@ -17,7 +17,7 @@
   <body onload="PageLoaded()">
 
 
-    <!-- cookie counter -->
+    <button class="ResetProgress" onclick="ClearProgress()">Reset Progress</button>
     
 
     <!-- cookie -->
@@ -35,7 +35,7 @@
     <h4>Stats</h4>
     <h1 id="CookieCount">Cookies:0</h1>
     <h1 id="CookiePerClick">Cookies Per Click:1</h1>
-    <h1 id="PrijsUpgrade">PrijsUpgrade:10 </h1>
+    <h1 id="CookiePerSecond">Cookies Per Second:0</h1>
   </div>
 </div>
 
@@ -62,8 +62,13 @@
         <tbody>
           <tr>
             <td>Cookie Per Click +1</td>
-            <td>190</td>
+            <td id="PrijsUpgrade">0</td>
             <td><button class="btn btn-primary btn-sm" onclick="CookiePerClickPlusOne()">Koop</button></td>
+          </tr>
+            <tr>
+            <td>AutoClicker</td>
+            <td id="PrijsAutoClicker">0</td>
+            <td><button class="btn btn-primary btn-sm" onclick="KoopAutoClicker()">Koop</button></td>
           </tr>
         </tbody>
       </table>
@@ -80,11 +85,16 @@
     let teller = parseInt(localStorage.getItem("teller")) || 0;
     let CookiePerClick = parseInt(localStorage.getItem("CookiePerClick")) || 1;
     let PrijsUpgrade = parseInt(localStorage.getItem("PrijsUpgrade")) || 10;
+    let PrijsAutoClicker = parseInt(localStorage.getItem("PrijsAutoClicker")) || 50;
+    let CookiePerSecond = parseInt(localStorage.getItem("CookiePerSecond")) || 0;
 
     function PageLoaded() {
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
       document.getElementById("CookiePerClick").innerHTML = "Cookies Per Click:" + CookiePerClick;
-      document.getElementById("PrijsUpgrade").innerHTML = "PrijsUpgrade:" + PrijsUpgrade;
+      document.getElementById("PrijsUpgrade").innerHTML = PrijsUpgrade;
+      document.getElementById("PrijsAutoClicker").innerHTML = PrijsAutoClicker;
+      document.getElementById("CookiePerSecond").innerHTML = "Cookies Per Second:" + CookiePerSecond;
+      CookiePerSecondFunction();
     }
 
     //als op cookie word geklikt dan teller + cookiesperclick
@@ -92,10 +102,24 @@
       teller = teller + CookiePerClick;
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
       localStorage.setItem("teller", teller); 
-      document.getElementById("cookie").style.width = "450px" ;
+      document.getElementById("cookie").style.scale = "0.9" ;
     setTimeout(() => {
-        document.getElementById("cookie").style.width = "500px" ;
+        document.getElementById("cookie").style.scale = "1" ;
         }, 100);
+    }
+
+    function KoopAutoClicker() {
+      if(teller >= PrijsAutoClicker){
+        teller = teller - PrijsAutoClicker
+        CookiePerSecond++;
+        PrijsAutoClicker = PrijsAutoClicker * 2;
+        document.getElementById("PrijsAutoClicker").innerHTML = PrijsAutoClicker;
+        document.getElementById("CookiePerSecond").innerHTML = "Cookies Per Second:" + CookiePerSecond;
+        document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+        localStorage.setItem("PrijsAutoClicker", PrijsAutoClicker);
+        localStorage.setItem("CookiePerSecond", CookiePerSecond);
+        localStorage.setItem("teller", teller);         
+      }
     }
 
     //functie om cookie per click erbij te doen
@@ -109,8 +133,8 @@
         localStorage.setItem("CookiePerClick", CookiePerClick);
         localStorage.setItem("teller", teller); 
          
-        PrijsUpgrade = PrijsUpgrade + 10;
-        document.getElementById("PrijsUpgrade").innerHTML = "PrijsUpgrade:" + PrijsUpgrade;
+        PrijsUpgrade = PrijsUpgrade * 2;
+        document.getElementById("PrijsUpgrade").innerHTML = PrijsUpgrade;
         localStorage.setItem("PrijsUpgrade", PrijsUpgrade);} 
 
        
@@ -123,5 +147,21 @@
             
         }
     }
+
+    function CookiePerSecondFunction() {
+      setTimeout(() => {
+      teller = teller + CookiePerSecond;
+      localStorage.setItem("teller", teller); 
+      document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+      CookiePerSecondFunction();
+      }, 1000);
+
+    }
+
+    function ClearProgress() {
+      localStorage.clear();
+      location.reload();
+    }
+
   </script>
 </html>
