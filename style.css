@@ -30,6 +30,7 @@ height: 0;
 .ResetProgress {
 position: absolute;
 bottom: 2%;
+left: 2%;
 background-color: #aa0404;
 border: none;
 color: white;
