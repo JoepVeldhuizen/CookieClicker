@@ -7,14 +7,13 @@
     left: 35%;
     top: 30%;
     width: 30%;
-    border-radius: 100%;
 }
  
 .row {
     width: 30%;
     left:  5%;
     position: absolute;
-    opacity: 70%;
+    background-op
 }
  
 .col-md-3 {
@@ -22,7 +21,7 @@ position: absolute;
 width: 30%;
 right: 5%;
 height: 0;
-opacity: 50%;
+
 }
  
 .table {
