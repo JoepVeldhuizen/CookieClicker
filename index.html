@@ -16,9 +16,7 @@
   </head>
   <body onload="PageLoaded()">
 
-
     <button class="ResetProgress" onclick="ClearProgress()">Reset Progress</button>
-    
 
     <!-- cookie -->
     <img
@@ -33,17 +31,19 @@
 <div class="row">
   <div class="col-md-3">Stats</div>
   <div class="card p-3 shadow-sm">
-    <h4>Stats</h4>
-    <h1 id="CookieCount">Cookies:0</h1>
-    <h1 id="CookiePerClick">Cookies Per Click:1</h1>
-    <h1 id="CookiePerSecond">Cookies Per Second:0</h1>
+    <h3>Stats</h3>
+    <hr>
+    <h6 id="CookieCount">Cookies:0</h6>
+    <hr>
+    <h6 id="CookiePerClick">Cookies Per Click:1</h6>
+    <hr>
+    <h6 id="CookiePerSecond">Cookies Per Second:0</h6>
+    <hr>
   </div>
 </div>
 
   <div class="col-md-6">Cookie</div>
   <div class="col-md-3"><button' id="koopknop" onclick="CookiePerClickPlusOne()">CookiePerClicks +1</button></div>
-
-
 
 </div>
 </div>
@@ -83,7 +83,6 @@
   </body>
   <script>
 
-
     //variables defineren
     let teller = parseInt(localStorage.getItem("teller")) || 0;
     let CookiePerClick = parseInt(localStorage.getItem("CookiePerClick")) || 1;
@@ -115,7 +114,7 @@
       if(teller >= PrijsAutoClicker){
         teller = teller - PrijsAutoClicker
         CookiePerSecond++;
-        PrijsAutoClicker = PrijsAutoClicker * 2;
+        PrijsAutoClicker = Math.round(PrijsAutoClicker * 1.5, 0);
         document.getElementById("PrijsAutoClicker").innerHTML = PrijsAutoClicker;
         document.getElementById("CookiePerSecond").innerHTML = "Cookies Per Second:" + CookiePerSecond;
         document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
@@ -136,7 +135,7 @@
         localStorage.setItem("CookiePerClick", CookiePerClick);
         localStorage.setItem("teller", teller); 
          
-        PrijsUpgrade = PrijsUpgrade * 2;
+        PrijsUpgrade = Math.round(PrijsUpgrade * 1.5, 0);
         document.getElementById("PrijsUpgrade").innerHTML = PrijsUpgrade;
         localStorage.setItem("PrijsUpgrade", PrijsUpgrade);} 
 
@@ -147,18 +146,16 @@
             setTimeout(() => {
             document.getElementById("koopknop").innerHTML = "CookiePerClicks +1"
             }, 1000);
-            
         }
     }
 
     function CookiePerSecondFunction() {
       setTimeout(() => {
       teller = teller + CookiePerSecond;
-      localStorage.setItem("teller", teller); 
+      localStorage.setItem("teller", teller);
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
       CookiePerSecondFunction();
       }, 1000);
-
     }
 
     function ClearProgress() {
