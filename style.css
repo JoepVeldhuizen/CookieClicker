@@ -7,13 +7,13 @@
     left: 35%;
     top: 30%;
     width: 30%;
+    border-radius: 100%;
 }
  
 .row {
     width: 30%;
     left:  5%;
     position: absolute;
-    background-op
 }
  
 .col-md-3 {
@@ -25,7 +25,6 @@ fill-opacity: 50%;
 }
  
 .table {
- 
     height: 0;
 }
 
@@ -47,9 +46,12 @@ border-radius: 5%;
 }
  
 body {
-    background-image: url(koekjes.jpg)   ;
-    background-size: 100%;
+    background-image: url(milk-7228322.jpg);
+    background-size: 50%;
+    background-position-y: 0%;
+    background-position-x: center;
 }
+
 
 #particle-container {
   position: fixed;
@@ -81,4 +83,26 @@ body {
     opacity: 0;
     transform: translate(var(--dx), var(--dy)) scale(0);
   }
+}
+
+.AutoClickerBarContainer {
+  background-color: white;
+  width: 20vw;
+  height: 5vh;
+  border-radius: 10px;
+  position: absolute;
+  left: 40vw;
+  visibility: hidden;
+}
+
+.AutoClickerBar {
+  background-color: rgb(0, 119, 255);
+  width: 0;
+  height: 4vh;
+  border-radius: 10px;
+  position: absolute;
+  left: 1.25%;
+  top: 10%;
+  transition: 1s;
+  visibility: hidden;
 }

@@ -26,6 +26,11 @@
       id="cookie"
       class="cookie"
     />
+
+    <div class="AutoClickerBarContainer" id="AutoClickerBarContainer">
+      <div class="AutoClickerBar" id="AutoClickerBar">
+      </div>
+    </div>
     
 <div class="container mt-4">
 <div class="row">
@@ -63,18 +68,20 @@
           <tr>
             <td>Cookie Per Click +1</td>
             <td id="PrijsUpgrade">0</td>
-            <td><button class="btn btn-primary btn-sm" onclick="CookiePerClickPlusOne()">Koop</button></td>
+            <td><button class="btn btn-primary btn-sm" id="Upgrade1Knop" onclick="CookiePerClickPlusOne()">Koop Nu</button></td>
           </tr>
             <tr>
             <td>AutoClicker</td>
             <td id="PrijsAutoClicker">0</td>
-            <td><button class="btn btn-primary btn-sm" onclick="KoopAutoClicker()">Koop</button></td>
+            <td><button class="btn btn-primary btn-sm" id="Autoclicker1knop" onclick="KoopAutoClicker()">Koop Nu</button></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
 
   <div id="particle-container"></div>
@@ -84,6 +91,7 @@
   <script>
 
     //variables defineren
+    const sound = document.getElementById("clickSound");
     let teller = parseInt(localStorage.getItem("teller")) || 0;
     let CookiePerClick = parseInt(localStorage.getItem("CookiePerClick")) || 1;
     let PrijsUpgrade = parseInt(localStorage.getItem("PrijsUpgrade")) || 10;
@@ -101,14 +109,14 @@
 
     function createParticleExplosion(x, y) {
       const container = document.getElementById('particle-container');
-      const count = 12;
+      const count = 5;
 
       for (let i = 0; i < count; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
 
         const angle = Math.random() * 2 * Math.PI;
-        const distance = 80 + Math.random() * 50;
+        const distance = 80 + Math.random() * 200;
         const dx = Math.cos(angle) * distance + "px";
         const dy = Math.sin(angle) * distance + "px";
 
@@ -133,6 +141,8 @@
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
       localStorage.setItem("teller", teller); 
       createParticleExplosion(event.clientX, event.clientY);  
+      sound.currentTime = 0;
+      sound.play();
       document.getElementById("cookie").style.scale = "0.9" ;
       setTimeout(() => {
         document.getElementById("cookie").style.scale = "1" ;
@@ -151,6 +161,13 @@
         localStorage.setItem("CookiePerSecond", CookiePerSecond);
         localStorage.setItem("teller", teller);         
       }
+      
+        else {
+            document.getElementById("Autoclicker1knop").innerHTML = "Te Duur"
+            setTimeout(() => {
+            document.getElementById("Autoclicker1knop").innerHTML = "Koop Nu"
+            }, 1000);
+        }
     }
 
     //functie om cookie per click erbij te doen
@@ -171,21 +188,45 @@
        
 
         else {
-            document.getElementById("koopknop").innerHTML = "Niet genoeg cookies"
+            document.getElementById("Upgrade1Knop").innerHTML = "Te Duur"
             setTimeout(() => {
-            document.getElementById("koopknop").innerHTML = "CookiePerClicks +1"
+            document.getElementById("Upgrade1Knop").innerHTML = "Koop Nu"
             }, 1000);
         }
     }
 
-    function CookiePerSecondFunction() {
-      setTimeout(() => {
-      teller = teller + CookiePerSecond;
-      localStorage.setItem("teller", teller);
-      document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
-      CookiePerSecondFunction();
-      }, 1000);
-    }
+function CookiePerSecondFunction() {
+  if(CookiePerSecond > 0){
+    document.getElementById("AutoClickerBar").style.visibility = "visible";
+    document.getElementById("AutoClickerBarContainer").style.visibility = "visible";
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+
+    createParticleExplosion(x, y);
+    sound.currentTime = 0;
+    sound.play();
+  }
+
+
+  const bar = document.getElementById("AutoClickerBar");
+
+  bar.style.transition = "width 1s linear";
+  bar.style.width = "19.5vw";
+
+  setTimeout(() => {
+    teller += CookiePerSecond;
+    localStorage.setItem("teller", teller);
+    document.getElementById("CookieCount").textContent = "Cookies:" + teller;
+
+    bar.style.transition = "none";
+    bar.style.width = "0";
+
+    void bar.offsetWidth;
+
+    setTimeout(CookiePerSecondFunction, 50);
+  }, 1000);
+}
+
 
     function ClearProgress() {
       localStorage.clear();
