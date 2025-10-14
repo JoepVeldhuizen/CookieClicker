@@ -1,4 +1,4 @@
-//variables defineren
+
     const sound = document.getElementById("clickSound");
     let teller = parseInt(localStorage.getItem("teller")) || 0;
     let CookiePerClick = parseInt(localStorage.getItem("CookiePerClick")) || 1;
@@ -6,7 +6,6 @@
     let PrijsAutoClicker = parseInt(localStorage.getItem("PrijsAutoClicker")) || 50;
     let CookiePerSecond = parseInt(localStorage.getItem("CookiePerSecond")) || 0;
 
-    // Klassen en game-logica voor 8 autoclickers en 5 upgrades
     class AutoClickerType {
       constructor(id, name, baseCost, cpsPerUnit) {
         this.id = id;
@@ -97,7 +96,6 @@
         for (const t of this.autoClickerTypes) {
           base += (this.ownedAutoClickers[t.id] || 0) * t.cpsPerUnit;
         }
-        // Upgrades beïnvloeden voortaan alleen Cookies Per Click
         return base;
       }
 
@@ -136,22 +134,91 @@
 
     const game = new Game();
 
-    // Init vanuit game-klassen
     PrijsAutoClicker = game.getAutoClickerPrice(0);
     PrijsUpgrade = game.getUpgradePrice(0);
     CookiePerSecond = Math.floor(game.getTotalCPS());
-    // Pas Cookies Per Click toe met upgrades
     CookiePerClick = (parseInt(localStorage.getItem("CookiePerClick")) || 1) * game.getCpcMultiplier();
 
-    // Winkel renderen in de tabel-body met id ShopBody
+    
+    class EventSystem {
+      constructor() {
+        this.activeUntilMs = 0;
+        this.clickTimes = []; 
+        this.initialQuietMs = 180000;
+        this.postEventQuietMs = 120000;
+        this.triggerClicks = 50;
+        this.triggerWindowMs = 10000;
+        this.durationMs = 10000;
+        const stored = parseInt(localStorage.getItem("nextEligibleTimeMs"));
+        const now = Date.now();
+        this.nextEligibleTimeMs = !isNaN(stored) ? stored : now + this.initialQuietMs;
+        if (isNaN(stored)) localStorage.setItem("nextEligibleTimeMs", String(this.nextEligibleTimeMs));
+        const initEndStored = parseInt(localStorage.getItem("initialQuietEndMs"));
+        this.initialQuietEndMs = !isNaN(initEndStored) ? initEndStored : now + this.initialQuietMs;
+        if (isNaN(initEndStored)) localStorage.setItem("initialQuietEndMs", String(this.initialQuietEndMs));
+      }
+
+      isActive() {
+        return Date.now() < this.activeUntilMs;
+      }
+
+      getMultiplier() {
+        return this.isActive() ? 2 : 1;
+      }
+
+      registerClick() {
+        const now = Date.now();
+        this.clickTimes.push(now);
+        const cutoff = now - this.triggerWindowMs;
+        this.clickTimes = this.clickTimes.filter(t => t >= cutoff);
+
+        const eligible = now >= this.nextEligibleTimeMs;
+        if (!this.isActive() && eligible && this.clickTimes.length >= this.triggerClicks) {
+          this.activeUntilMs = now + this.durationMs;
+          this.nextEligibleTimeMs = this.activeUntilMs + this.postEventQuietMs;
+          localStorage.setItem("nextEligibleTimeMs", String(this.nextEligibleTimeMs));
+          this.updateBanner();
+        } else {
+          this.updateBanner();
+        }
+      }
+
+      updateBanner() {
+        const el = document.getElementById("EventBanner");
+        if (!el) return;
+        const now = Date.now();
+        if (!this.isActive() && now < this.initialQuietEndMs) {
+          el.textContent = "Geen evenementen voor 3 min";
+          return;
+        }
+        if (this.isActive()) {
+          const ms = Math.max(0, this.activeUntilMs - now);
+          el.textContent = `2x cookies (${Math.ceil(ms / 1000)}s)`;
+          return;
+        }
+        el.textContent = "Geen evenement";
+      }
+
+      tick() {
+
+        if (!this.isActive() && Date.now() >= this.activeUntilMs && this.activeUntilMs !== 0) {
+          this.activeUntilMs = 0;
+        }
+        this.updateBanner();
+      }
+    }
+
+    const eventSystem = new EventSystem();
+
+
     function renderExistingShop() {
       const tbody = document.getElementById("ShopBody");
       if (!tbody) return;
 
-      // verwijder eerdere dynamische rijen
+
       Array.from(tbody.querySelectorAll("tr.dyn-row")).forEach(r => r.remove());
 
-      // Autoclickers (alle 8)
+
       game.autoClickerTypes.forEach(t => {
         const owned = game.ownedAutoClickers[t.id] || 0;
         const price = game.getAutoClickerPrice(t.id);
@@ -171,11 +238,11 @@
             CookiePerSecond = Math.floor(game.getTotalCPS());
             document.getElementById("CookieCount").textContent = "Cookies:" + teller;
             document.getElementById("CookiePerSecond").textContent = "Cookies Per Second:" + CookiePerSecond;
-            // prijzen worden alleen dynamisch in de shop getoond
+
             localStorage.setItem("CookiePerSecond", CookiePerSecond);
             renderExistingShop();
           } else {
-            // optioneel feedback via alert, UI kan later uitgebreid worden
+
           }
         });
         actionTd.appendChild(btn);
@@ -185,7 +252,6 @@
         tbody.appendChild(tr);
       });
 
-      // Upgrades (alle 5)
       game.upgrades.forEach(u => {
         const level = game.upgradeLevels[u.id] || 0;
         const price = game.getUpgradePrice(u.id);
@@ -204,15 +270,14 @@
             teller = parseInt(localStorage.getItem("teller")) || 0;
             CookiePerSecond = Math.floor(game.getTotalCPS());
             document.getElementById("CookieCount").textContent = "Cookies:" + teller;
-            document.getElementById("CookiePerSecond").textContent = "Cookies Per Second:" + CookiePerSecond;
-            // Upgrades verhogen CPC
+
             CookiePerClick = (parseInt(localStorage.getItem("CookiePerClick")) || 1) * game.getCpcMultiplier();
             document.getElementById("CookiePerClick").textContent = "Cookies Per Click:" + CookiePerClick;
             localStorage.setItem("CookiePerClick", CookiePerClick);
             localStorage.setItem("CookiePerSecond", CookiePerSecond);
             renderExistingShop();
           } else {
-            // optioneel feedback via alert
+
           }
         });
         actionTd.appendChild(btn);
@@ -229,6 +294,8 @@
       document.getElementById("CookiePerSecond").innerHTML = "Cookies Per Second:" + Math.floor(game.getTotalCPS());
       CookiePerSecondFunction();
       renderExistingShop();
+      // start event ticker
+      setInterval(() => eventSystem.tick(), 1000);
     }
 
     function createParticleExplosion(x, y) {
@@ -261,7 +328,8 @@
 
     //als op cookie word geklikt dan teller + cookiesperclick
     function CookieClicked() {
-      teller = teller + CookiePerClick;
+      const cpc = CookiePerClick * eventSystem.getMultiplier();
+      teller = teller + cpc;
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
       localStorage.setItem("teller", teller); 
       createParticleExplosion(event.clientX, event.clientY);  
@@ -271,11 +339,11 @@
       setTimeout(() => {
         document.getElementById("cookie").style.scale = "1" ;
         }, 100);
+      eventSystem.registerClick();
     }
 
-    // Quick-knoppen verwijderd uit UI; functie blijft bestaan voor compatibiliteit
     function KoopAutoClicker() {
-      // optioneel: koop eerste autoclicker
+
       if (game.buyAutoClicker(0)) {
         teller = parseInt(localStorage.getItem("teller")) || 0;
         CookiePerSecond = Math.floor(game.getTotalCPS());
@@ -324,10 +392,11 @@ function CookiePerSecondFunction() {
   bar.style.width = "19.5vw";
 
   setTimeout(() => {
-    teller += CookiePerSecond;
+    const cpsWithEvent = Math.floor(CookiePerSecond * eventSystem.getMultiplier());
+    teller += cpsWithEvent;
     localStorage.setItem("teller", teller);
     document.getElementById("CookieCount").textContent = "Cookies:" + teller;
-    document.getElementById("CookiePerSecond").textContent = "Cookies Per Second:" + CookiePerSecond;
+    document.getElementById("CookiePerSecond").textContent = "Cookies Per Second:" + cpsWithEvent;
 
     bar.style.transition = "none";
     bar.style.width = "0";
