@@ -426,7 +426,7 @@ function CookiePerSecondFunction() {
         teller -= 10;
         document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
         localStorage.setItem("teller", teller);
-        document.getElementById("body").style.backgroundimage = "milk-7228322.jpg"
+        document.getElementById("body").style.backgroundImage = "url(milk-7228322.jpg)"
       }
     } 
 
@@ -437,7 +437,7 @@ function CookiePerSecondFunction() {
         teller -= 10;
         document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
         localStorage.setItem("teller", teller);
-        document.getElementById("body").style.backgroundimage = "christmas-5705046_1920.jpg"
+        document.getElementById("body").style.backgroundImage = "url(christmas-5705046_1920.jpg)"
       }
     } 
 
@@ -446,6 +446,6 @@ function CookiePerSecondFunction() {
         teller -= 10;
         document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
         localStorage.setItem("teller", teller);
-        document.getElementById("body").style.backgroundimage = "cookies-5809181_1920.jpg"
+        document.getElementById("body").style.backgroundImage = "url(cookies-5809181_1920.jpg)"
       }
     } 
