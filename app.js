@@ -412,3 +412,40 @@ function CookiePerSecondFunction() {
       localStorage.clear();
       location.reload();
     }
+
+    function showbackgroundmenu() {
+      document.getElementById("menucontent").style.visibility = "visible";
+    }
+    
+    function hidebackgroundmenu() {
+      document.getElementById("menucontent").style.visibility = "hidden";
+    }
+
+    function background1() {
+      if (teller > 10)  {
+        teller -= 10;
+        document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+        localStorage.setItem("teller", teller);
+        document.getElementById("body").style.backgroundimage = "milk-7228322.jpg"
+      }
+    } 
+
+
+
+    function background2() {
+      if (teller > 10)  {
+        teller -= 10;
+        document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+        localStorage.setItem("teller", teller);
+        document.getElementById("body").style.backgroundimage = "christmas-5705046_1920.jpg"
+      }
+    } 
+
+   function background3() {
+      if (teller > 10)  {
+        teller -= 10;
+        document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
+        localStorage.setItem("teller", teller);
+        document.getElementById("body").style.backgroundimage = "cookies-5809181_1920.jpg"
+      }
+    } 

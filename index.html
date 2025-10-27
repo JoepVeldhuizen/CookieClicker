@@ -14,7 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cookie Clicker</title>
   </head>
-  <body onload="PageLoaded()">
+  <body onload="PageLoaded()" id="body">
+
 
     <button class="ResetProgress" onclick="ClearProgress()">Reset Progress</button>
 
@@ -55,6 +56,18 @@
 
 </div>
 </div>
+<div onmouseover="showbackgroundmenu()" onmouseout="hidebackgroundmenu()" class="dropdown">
+
+  <button class="dropbtn">Dropdown</button>
+  <div id="menucontent" class="menucontent"> 
+  <button onclick="background1()"  class="achtergrond-1">achergrond 1</button>
+  <button class="achtergrond-2">achtergrond 2</button>
+  <button class="achtergrond-3">achtergrond 3</button>
+  </div>
+</div>
+
+
+
 
 <div class="col-md-3">
   <div class="card upgrades-box">

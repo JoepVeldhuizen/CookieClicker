@@ -106,3 +106,26 @@ body {
   transition: 1s;
   visibility: hidden;
 }
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  width: 10%;
+  border-radius: 8px;
+  position: absolute;
+  left: 4.5%;
+  top: 40%;
+  font-size: x-large;
+  
+}
+
+
+.achtergrond-1 {
+  background-color: blueviolet;
+
+}
+
+.menucontent {
+  visibility: hidden;
+}
+
