@@ -140,75 +140,7 @@
     CookiePerClick = (parseInt(localStorage.getItem("CookiePerClick")) || 1) * game.getCpcMultiplier();
 
     
-    class EventSystem {
-      constructor() {
-        this.activeUntilMs = 0;
-        this.clickTimes = []; 
-        this.initialQuietMs = 180000;
-        this.postEventQuietMs = 120000;
-        this.triggerClicks = 50;
-        this.triggerWindowMs = 10000;
-        this.durationMs = 10000;
-        const stored = parseInt(localStorage.getItem("nextEligibleTimeMs"));
-        const now = Date.now();
-        this.nextEligibleTimeMs = !isNaN(stored) ? stored : now + this.initialQuietMs;
-        if (isNaN(stored)) localStorage.setItem("nextEligibleTimeMs", String(this.nextEligibleTimeMs));
-        const initEndStored = parseInt(localStorage.getItem("initialQuietEndMs"));
-        this.initialQuietEndMs = !isNaN(initEndStored) ? initEndStored : now + this.initialQuietMs;
-        if (isNaN(initEndStored)) localStorage.setItem("initialQuietEndMs", String(this.initialQuietEndMs));
-      }
 
-      isActive() {
-        return Date.now() < this.activeUntilMs;
-      }
-
-      getMultiplier() {
-        return this.isActive() ? 2 : 1;
-      }
-
-      registerClick() {
-        const now = Date.now();
-        this.clickTimes.push(now);
-        const cutoff = now - this.triggerWindowMs;
-        this.clickTimes = this.clickTimes.filter(t => t >= cutoff);
-
-        const eligible = now >= this.nextEligibleTimeMs;
-        if (!this.isActive() && eligible && this.clickTimes.length >= this.triggerClicks) {
-          this.activeUntilMs = now + this.durationMs;
-          this.nextEligibleTimeMs = this.activeUntilMs + this.postEventQuietMs;
-          localStorage.setItem("nextEligibleTimeMs", String(this.nextEligibleTimeMs));
-          this.updateBanner();
-        } else {
-          this.updateBanner();
-        }
-      }
-
-      updateBanner() {
-        const el = document.getElementById("EventBanner");
-        if (!el) return;
-        const now = Date.now();
-        if (!this.isActive() && now < this.initialQuietEndMs) {
-          el.textContent = "Geen evenementen voor 3 min";
-          return;
-        }
-        if (this.isActive()) {
-          const ms = Math.max(0, this.activeUntilMs - now);
-          el.textContent = `2x cookies (${Math.ceil(ms / 1000)}s)`;
-          return;
-        }
-        el.textContent = "Geen evenement";
-      }
-
-      tick() {
-
-        if (!this.isActive() && Date.now() >= this.activeUntilMs && this.activeUntilMs !== 0) {
-          this.activeUntilMs = 0;
-        }
-        this.updateBanner();
-      }
-    }
-
-    const eventSystem = new EventSystem();
 
 
     function renderExistingShop() {
@@ -294,8 +226,6 @@
       document.getElementById("CookiePerSecond").innerHTML = "Cookies Per Second:" + Math.floor(game.getTotalCPS());
       CookiePerSecondFunction();
       renderExistingShop();
-      // start event ticker
-      setInterval(() => eventSystem.tick(), 1000);
     }
 
     function createParticleExplosion(x, y) {
@@ -392,7 +322,7 @@ function CookiePerSecondFunction() {
   bar.style.width = "19.5vw";
 
   setTimeout(() => {
-    const cpsWithEvent = Math.floor(CookiePerSecond * eventSystem.getMultiplier());
+    const cpsWithEvent = Math.floor(CookiePerSecond);
     teller += cpsWithEvent;
     localStorage.setItem("teller", teller);
     document.getElementById("CookieCount").textContent = "Cookies:" + teller;
