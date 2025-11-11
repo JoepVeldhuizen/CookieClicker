@@ -1,5 +1,6 @@
 
     const sound = document.getElementById("clickSound");
+    let eventMultiplier = 1;
     let teller = parseInt(localStorage.getItem("teller")) || 0;
     let CookiePerClick = parseInt(localStorage.getItem("CookiePerClick")) || 1;
     let PrijsUpgrade = parseInt(localStorage.getItem("PrijsUpgrade")) || 10;
@@ -226,6 +227,7 @@
       document.getElementById("CookiePerSecond").innerHTML = "Cookies Per Second:" + Math.floor(game.getTotalCPS());
       CookiePerSecondFunction();
       renderExistingShop();
+      setTimeout(startEventTimer, 50000);
     }
 
     function createParticleExplosion(x, y) {
@@ -258,7 +260,7 @@
 
     //als op cookie word geklikt dan teller + cookiesperclick
     function CookieClicked() {
-      const cpc = CookiePerClick * eventSystem.getMultiplier();
+      const cpc = CookiePerClick * eventMultiplier;
       teller = teller + cpc;
       document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
       localStorage.setItem("teller", teller); 
@@ -269,7 +271,6 @@
       setTimeout(() => {
         document.getElementById("cookie").style.scale = "1" ;
         }, 100);
-      eventSystem.registerClick();
     }
 
     function KoopAutoClicker() {
@@ -289,10 +290,9 @@
     function CookiePerClickPlusOne() {
       if (game.buyUpgrade(0)) {
         teller = parseInt(localStorage.getItem("teller")) || 0;
-        CookiePerSecond = Math.floor(game.getTotalCPS());
+        CookiePerSecond = Math.floor(game.getTotalCPS() * eventMultiplier);
         document.getElementById("CookiePerSecond").innerHTML = "Cookies Per Second:" + CookiePerSecond;
         document.getElementById("CookieCount").innerHTML = "Cookies:" + teller;
-        // Upgrades verhogen CPC
         CookiePerClick = (parseInt(localStorage.getItem("CookiePerClick")) || 1) * game.getCpcMultiplier();
         document.getElementById("CookiePerClick").innerHTML = "Cookies Per Click:" + CookiePerClick;
         localStorage.setItem("CookiePerClick", CookiePerClick);
@@ -322,7 +322,7 @@ function CookiePerSecondFunction() {
   bar.style.width = "19.5vw";
 
   setTimeout(() => {
-    const cpsWithEvent = Math.floor(CookiePerSecond);
+    const cpsWithEvent = Math.floor(CookiePerSecond * eventMultiplier);
     teller += cpsWithEvent;
     localStorage.setItem("teller", teller);
     document.getElementById("CookieCount").textContent = "Cookies:" + teller;
@@ -337,6 +337,17 @@ function CookiePerSecondFunction() {
   }, 1000);
 }
 
+    function startEventTimer() {
+      document.getElementById("EventBalk").style.visibility = "visible";
+      setTimeout(endEvent, 10000);
+      eventMultiplier = 2;
+    }
+
+    function endEvent() {
+      document.getElementById("EventBalk").style.visibility = "hidden";
+      eventMultiplier = 1;
+      setTimeout(startEventTimer, 50000);
+    }
 
     function ClearProgress() {
       localStorage.clear();

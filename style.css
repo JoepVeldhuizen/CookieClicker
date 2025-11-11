@@ -44,6 +44,17 @@ margin: 4px 2px;
 cursor: pointer;
 border-radius: 5%;
 }
+
+.EventBalk {
+  background-color: yellow;
+  opacity: 50%;
+  width: 90vw;
+  height: 10vh;
+  position: relative;
+  left: 5vw;
+  top: 5vh;
+  visibility: hidden;
+}
  
 body {
     background-image: url(milk-7228322.jpg);
@@ -114,7 +125,7 @@ body {
   border-radius: 8px;
   position: absolute;
   left: 4.5%;
-  top: 40%;
+  top: 50%;
   font-size: x-large;
   
 }
